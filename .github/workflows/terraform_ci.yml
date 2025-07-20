@@ -1,1 +1,33 @@
+name: provisioning EKS using terraform and automated by github Actions
+on:
+  push:
+    branches: [main]
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_KEY: ${{$secrets.AWS_SECRET_KEY}}
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v3
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+          terraform_version: 1.7.5
+    - name: terraform init
+      run: terraform init
+    - name: terraform format check
+      run: terraform fmt -check
+    - name: terraform plan
+      run: terraform plan
+  # - name: terraform apply
+  #   if: github.ref == 'refs/heads/main'
+  #   run: terraform apply -auto-approve
+      
+      
+    
+     
+    
 
